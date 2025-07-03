@@ -1,0 +1,35 @@
+[Unit]
+Description=代理检测服务
+Documentation=https://github.com/your-repo/proxy-checker
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=proxy-checker
+Group=proxy-checker
+WorkingDirectory=/opt/proxy-checker
+ExecStart=/opt/proxy-checker/proxy-checker
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=5s
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/proxy-checker
+
+# 资源限制
+LimitNOFILE=1048576
+LimitNPROC=1048576
+
+# 日志设置
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=proxy-checker
+
+[Install]
+WantedBy=multi-user.target 
